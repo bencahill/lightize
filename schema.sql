@@ -5,6 +5,7 @@ CREATE TABLE image(
 	info TEXT,
 	rating INTEGER NOT NULL,
 	edits TEXT,
+	UNIQUE (name, directoryId),
 	FOREIGN KEY(directoryId) REFERENCES directory(id) ON DELETE CASCADE
 );
 
