@@ -22,7 +22,11 @@ class Directory {
 	}
 
 	public function getImages() {
-		return $db->get_results( "SELECT id,name,date,info,rating,edits FROM image WHERE directoryId='$this->id'" );
+		$result = $db->get_results( "SELECT id,name,date,info,rating,edits FROM image WHERE directoryId='$this->id'" );
+		foreach ( $result as &$image ) {
+			$image->info = unserialize( $image->info );
+		}
+		return $result;
 	}
 
 	public function getNewImages() {
