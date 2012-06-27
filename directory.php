@@ -10,13 +10,7 @@ class Directory {
 	public function __construct( $name ) {
 		// set the name as a variable so we can access it later
 		$this->name = $name;
-		// check if this dir does not exist in the db; if so, run the query again
-		if ( ! $db->get_var( "SELECT id FROM directory WHERE name='$this->name'" ) ) {
-			$db->query( "INSERT INTO directory (name, date) VALUES ('$this->name', ".time().")"
-			$db->get_var( "SELECT id FROM directory WHERE name='$this->name'" );
-		}
-		// set the id variable with ezSQL's cached results
-		$this->id = $db->get_var( null );
+		$this->id = $db->get_var( "SELECT id FROM directory WHERE name='$this->name'" );
 		$this->imageDir = Config::imageDir."/$this->name";
 		$this->cacheDir = Config::cacheDir."/$this->name";
 	}
@@ -37,6 +31,14 @@ class Directory {
 	public function addImages( $images ) {
 		// check if $images is a non-empty array
 		if ( is_array( $images ) && ! empty( $images ) ) {
+			// check if this dir does not exist in the db; if so, run the query again
+			if ( ! $db->get_var( "SELECT id FROM directory WHERE name='$this->name'" ) ) {
+				$db->query( "INSERT INTO directory (name, date) VALUES ('$this->name', ".time().")"
+				$db->get_var( "SELECT id FROM directory WHERE name='$this->name'" );
+			}
+			// set the id variable with ezSQL's cached results
+			$this->id = $db->get_var( null );
+
 			// initialize the "Unknown" event for this dir, possibly creating it
 			$event = new Event( "Unknown", $this->id );
 			// ensure that the cache dir exists
