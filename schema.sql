@@ -20,7 +20,7 @@ CREATE TABLE event(
 	id INTEGER PRIMARY KEY NOT NULL,
 	name TEXT NOT NULL,
 	directoryId INTEGER NOT NULL,
-	date INTEGER NOT NULL
+	date INTEGER NOT NULL,
 	UNIQUE (name, directoryId),
 	FOREIGN KEY(directoryId) REFERENCES directory(id) ON DELETE CASCADE
 );
