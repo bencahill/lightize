@@ -3,6 +3,7 @@
 class Image {
 
 	public $name;
+	public $id;
 	private $dirName;
 	public $date;
 	public $info;
@@ -10,6 +11,8 @@ class Image {
 	public function __construct( $name, $dirName ) {
 		$this->name = $name;
 		$this->dirName = $dirName;
+		$dir = new Directory( $dirName );
+		$this->id = $db->get_var( "SELECT id FROM image WHERE name='$this->name' AND directoryId=$dir->id" );
 	}
 
 	public function getInfo() {
