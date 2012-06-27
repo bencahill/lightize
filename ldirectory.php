@@ -27,7 +27,7 @@ class LDirectory {
 
 	public function getNewImages() {
 		global $db;
-		chdir( Config::imageDir );
+		chdir( $this->imageDir );
 		return array_diff( glob( "{*.jpg,*.JPG}", GLOB_BRACE ), $db->get_results( "SELECT name FROM image WHERE directoryId='$this->id'" ) );
 	}
 
