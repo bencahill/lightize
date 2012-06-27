@@ -16,7 +16,7 @@ class Event {
 
 	public function add() {
 		if ( empty( $this->id ) ) {
-			$db->query( "INSERT INTO event (name, directoryId) VALUES ('$this->name', $this->dirId)" );
+			$db->query( "INSERT INTO event (name, directoryId, date) VALUES ('$this->name', $this->dirId, ".time().")" );
 			$this->id = getId();
 		}
 	}
