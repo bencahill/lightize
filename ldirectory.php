@@ -33,7 +33,7 @@ class LDirectory {
 		if ( is_array( $images ) && ! empty( $images ) ) {
 			// check if this dir does not exist in the db; if so, run the query again
 			if ( ! $db->get_var( "SELECT id FROM directory WHERE name='$this->name'" ) ) {
-				$db->query( "INSERT INTO directory (name, date) VALUES ('$this->name', ".time().")"
+				$db->query( "INSERT INTO directory (name, date) VALUES ('$this->name', ".time().")" );
 				$db->get_var( "SELECT id FROM directory WHERE name='$this->name'" );
 			}
 			// set the id variable with ezSQL's cached results
