@@ -2,6 +2,7 @@ CREATE TABLE image(
 	id INTEGER PRIMARY KEY NOT NULL,
 	name TEXT NOT NULL,
 	directoryId INTEGER NOT NULL,
+	eventId INTEGER NOT NULL,
 	date TEXT,
 	info TEXT,
 	rating INTEGER NOT NULL,
