@@ -9,6 +9,7 @@ class Image {
 	public $info;
 
 	public function __construct( $name, $dirName ) {
+		global $db;
 		$this->name = $name;
 		$this->dirName = $dirName;
 		$dir = new LDirectory( $dirName );
