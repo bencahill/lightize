@@ -11,7 +11,7 @@ class Image {
 	public function __construct( $name, $dirName ) {
 		$this->name = $name;
 		$this->dirName = $dirName;
-		$dir = new Directory( $dirName );
+		$dir = new LDirectory( $dirName );
 		$this->id = $db->get_var( "SELECT id FROM image WHERE name='$this->name' AND directoryId=$dir->id" );
 	}
 

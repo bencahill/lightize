@@ -1,6 +1,6 @@
 <?php
 
-class Directory {
+class LDirectory {
 
 	public $name;
 	public $id;
