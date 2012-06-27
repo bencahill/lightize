@@ -27,8 +27,17 @@ class LDirectory {
 
 	public function getNewImages() {
 		global $db;
-		chdir( $this->imageDir );
-		return array_diff( glob( "{*.jpg,*.JPG}", GLOB_BRACE ), $db->get_results( "SELECT name FROM image WHERE directoryId='$this->id'" ) );
+		$files = array ( );
+		$dirHandle = opendir( $this->imageDir );
+		while ( $file = readdir($dirHandle) ) {
+			if ( preg_match( '/\.jpg$/i', $file ) == 1 && $file != '.' && $file != '..' ) {
+				$files[] = $file;
+			}
+		}
+		closedir($dirHandle);
+		$newFiles = array_diff( $files, $db->get_results( "SELECT name FROM image WHERE directoryId='$this->id'" )?:array() );
+		sort( $newFiles );
+		return $newFiles;
 	}
 
 	public function addImages( $images ) {
