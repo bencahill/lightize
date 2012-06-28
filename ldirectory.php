@@ -52,8 +52,6 @@ class LDirectory {
 			// set the id variable with ezSQL's cached results
 			$this->id = $db->get_var( null );
 
-			// initialize the "Unknown" event for this dir, possibly creating it
-			$event = new Event( "Unknown", $this->id );
 			// ensure that the cache dir exists
 			mkdir( $this->cacheDir, 0700, true );
 
@@ -80,6 +78,9 @@ class LDirectory {
 
 	private function addToDb( $images ) {
 		global $db;
+		// initialize the "Unknown" event for this dir, possibly creating it
+		$event = new Event( "Unknown", $this->id );
+		$event->add();
 		foreach ( $images as $image_name ) {
 			// instantiate the image to get EXIF info
 			$image = new Image( $image_name, $this->name );
