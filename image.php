@@ -12,12 +12,12 @@ class Image {
 		global $db;
 		$this->name = $name;
 		$this->dirName = $dirName;
-		$dir = new LDirectory( $dirName );
+		$dir = new LDirectory( $this->dirName );
 		$this->id = $db->get_var( "SELECT id FROM image WHERE name='$this->name' AND directoryId=$dir->id" );
 	}
 
 	public function getInfo() {
-		$info = eval( "return ".shell_exec( "exiftool -php -q -d '%s' -model -focallength -shutterspeed -aperture -iso -datetimeoriginal -exposurecompensation -lens -whitebalance -flash -shootingmode -focusmode ".L_IMAGE_DIR."/".$dirName."/".$this->name ) )[0];
+		$info = eval( "return ".shell_exec( "exiftool -php -q -d '%s' -model -focallength -shutterspeed -aperture -iso -datetimeoriginal -exposurecompensation -lens -whitebalance -flash -shootingmode -focusmode ".L_IMAGE_DIR."/".$this->dirName."/".$this->name ) )[0];
 
 		$this->date = $info['DateTimeOriginal'];
 		unset( $info['DateTimeOriginal'] );

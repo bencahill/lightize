@@ -57,9 +57,9 @@ class LDirectory {
 			// ensure that the cache dir exists
 			mkdir( $this->cacheDir, 0700, true );
 
-			createThumbnails( $images );
+			$this->createThumbnails( $images );
 
-			addToDb( $images );
+			$this->addToDb( $images );
 		} elseif ( is_array( $images ) ) {
 			echo "\$images array is empty!";
 		} else {

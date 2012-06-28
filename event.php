@@ -10,7 +10,7 @@ class Event {
 		global $db;
 		$this->name = $name;
 		$this->dirId = $dirId;
-		if ( getId() ) {
+		if ( $this->getId() ) {
 			$this->id = $db->get_var( null );
 		}
 	}
@@ -19,7 +19,7 @@ class Event {
 		global $db;
 		if ( empty( $this->id ) ) {
 			$db->query( "INSERT INTO event (name, directoryId, date) VALUES ('$this->name', $this->dirId, ".time().")" );
-			$this->id = getId();
+			$this->id = $this->getId();
 		}
 	}
 

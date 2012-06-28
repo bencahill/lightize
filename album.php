@@ -8,14 +8,14 @@ class Album {
 	public function __construct( $name ) {
 		global $db;
 		$this->name = $name;
-		$this->id = getId();
+		$this->id = $this->getId();
 	}
 
 	public function add() {
 		global $db;
 		if ( empty( $this->id ) ) {
 			$db->query( "INSERT INTO album (name, date) VALUES ('$this->name', ".time().")" );
-			$this->id = getId();
+			$this->id = $this->getId();
 		}
 	}
 
