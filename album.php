@@ -14,7 +14,8 @@ class Album {
 	public function add() {
 		global $db;
 		if ( empty( $this->id ) ) {
-			$db->query( "INSERT INTO album (name, date) VALUES ('$this->name', ".time().")" );
+			$sth = $db->prepare( "INSERT INTO album (name, date) VALUES (:name, :date)" );
+			$sth->execute( array( "name" => $this->name, "date" => time() ) );
 			$this->id = $this->getId();
 		}
 	}
@@ -22,28 +23,45 @@ class Album {
 	public function remove() {
 		global $db;
 		if ( ! empty( $this->id ) ) {
-			$db->query( "DELETE FROM album WHERE name='$this->name'" );
-			$db->query( "DELETE FROM imageAlbum WHERE albumId=$this->id" );
+			$sth = $db->prepare( "DELETE FROM album WHERE name=?" );
+			$sth->execute( array( $this->name ) );
+			$sth = $db->prepare( "DELETE FROM imageAlbum WHERE albumId=?" );
+			$sth->execute( array( $this->id ) );
 		} else {
 			echo "Album was not in the database!";
 		}
 	}
 
-	public function addImage( $image_name, $dirId ) {
+	public function getImages() {
 		global $db;
-		$image = new Image( $image_name, $dirId );
-		$db->query( "INSERT INTO imageAlbum (imageId, albumId) VALUES ($image->id, $this->id)" );
+		$sth = $db->prepare( "SELECT id,name,date,info,rating,edits FROM image WHERE id IN (SELECT imageId FROM imageAlbum WHERE albumId=?)" );
+		$sth->execute( array( $this->id ) );
+		$result = $sth->fetchAll( PDO::FETCH_CLASS, 'Image' );
+		foreach ( $result as &$image ) {
+			$image->info = unserialize( $image->info );
+		}
+		return $result;
+	}
+
+	public function addImage( $image_name, $dirName ) {
+		global $db;
+		$image = new Image( $image_name, $dirName );
+		$sth = $db->prepare( "INSERT INTO imageAlbum (imageId, albumId) VALUES (:imageId, :albumId)" );
+		$sth->execute( array( "imageId" => $image->id, "albumId" => $this->id ) );
 	}
 
 	public function removeImage( $image_name, $dirId ) {
 		global $db;
 		$image = new Image( $image_name, $dirId );
-		$db->query( "DELETE FROM imageAlbum WHERE albumId=$this->id AND imageId=$image->id" );
+		$sth = $db->prepare( "DELETE FROM imageAlbum WHERE imageId=:imageId AND albumId=:albumId" );
+		$sth->execute( array( "imageId" => $image->id, "albumId" => $this->id ) );
 	}
 
 	private function getId() {
 		global $db;
-		return $db->get_var( "SELECT id FROM album WHERE name='$this->name'" );
+		$sth = $db->prepare( "SELECT id FROM album WHERE name=?" );
+		$sth->execute( array( $this->name ) );
+		return $sth->fetchColumn();
 	}
 
 }

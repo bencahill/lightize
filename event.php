@@ -4,21 +4,24 @@ class Event {
 
 	private $name;
 	private $dirId;
+	private $dirName;
 	public $id;
 
-	public function __construct( $name, $dirId ) {
+	public function __construct( $name, $dirName ) {
 		global $db;
 		$this->name = $name;
-		$this->dirId = $dirId;
-		if ( $this->getId() ) {
-			$this->id = $db->get_var( null );
-		}
+		$this->dirName = $dirName;
+		$dir = new LDirectory( $dirName );
+		$this->dirId = $dir->id;
+		$this->id = $this->getId();
 	}
 
 	public function add() {
 		global $db;
 		if ( empty( $this->id ) ) {
-			$db->query( "INSERT INTO event (name, directoryId, date) VALUES ('$this->name', $this->dirId, ".time().")" );
+			echo $this->id;
+			$sth = $db->prepare( "INSERT INTO event (name, directoryId, date) VALUES (:name, :directoryId, :date)" );
+			$sth->execute( array( "name" => $this->name, "directoryId" => $this->dirId, "date" => time() ) );
 			$this->id = $this->getId();
 		}
 	}
@@ -26,9 +29,11 @@ class Event {
 	public function remove() {
 		global $db;
 		if ( ! empty( $this->id ) ) {
-			$db->query( "DELETE FROM event WHERE name='$this->name' AND directoryId=$this->dirId" );
-			$uevent = getUnknown();
-			$db->query( "UPDATE image SET eventId=$uevent->id WHERE eventId=$this->id AND directoryId=$this->dirId" );
+			$sth = $db->prepare( "DELETE FROM event WHERE name=:name AND directoryId=:directoryId" );
+			$sth->execute( array( "name" => $this->name, "directoryId" => $this->dirId ) );
+			$uevent = $this->getUnknown();
+			$sth = $db->prepare( "UPDATE image SET eventId=:ueventId WHERE eventId=:eventId AND directoryId=:directoryId" );
+			$sth->execute( array( "ueventId" => $uevent->id, "eventId" => $this->id, "directoryId" => $this->dirId ) );
 		} else {
 			echo "Event was not in the database!";
 		}
@@ -36,22 +41,26 @@ class Event {
 
 	public function addImage( $image_name ) {
 		global $db;
-		$db->query( "UPDATE image SET eventId=$this->id WHERE name='$image_name' AND directoryId=$this->dirId" );
+		$sth = $db->prepare( "UPDATE image SET eventId=:eventId WHERE name=:name AND directoryId=:directoryId" );
+		$sth->execute( array( "eventId" => $this->id, "name" => $image_name, "directoryId" => $this->dirId ) );
 	}
 
 	public function removeImage( $image_name ) {
 		global $db;
-		$uevent = getUnknown();
-		$db->query( "UPDATE image SET eventId=$uevent->id WHERE name='$image_name' AND directoryId=$this->dirId" );
+		$uevent = $this->getUnknown();
+		$sth = $db->prepare( "UPDATE image SET eventId=:eventId WHERE name=:name AND directoryId=:directoryId" );
+		$sth->execute( array( "eventId" => $uevent->id, "name" => $image_name, "directoryId" => $this->dirId ) );
 	}
 
 	private function getId() {
 		global $db;
-		return $db->get_var( "SELECT id FROM event WHERE name='$this->name' AND directoryId='$this->dirId'" );
+		$sth = $db->prepare( "SELECT id FROM event WHERE name=:name AND directoryId=:directoryId" );
+		$sth->execute( array( "name" => $this->name, "directoryId" => $this->dirId ) );
+		return $sth->fetchColumn();
 	}
 
 	private function getUnknown() {
-		$uevent = new Event( "Unknown", $this->dirId );
+		$uevent = new Event( "Unknown", $this->dirName );
 		$uevent->add();
 		return $uevent;
 	}

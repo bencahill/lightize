@@ -11,14 +11,16 @@ class LDirectory {
 		global $db;
 		// set the name as a variable so we can access it later
 		$this->name = $name;
-		$this->id = $db->get_var( "SELECT id FROM directory WHERE name='$this->name'" );
+		$this->id = $this->getId();
 		$this->imageDir = L_IMAGE_DIR."/$this->name";
 		$this->cacheDir = L_CACHE_DIR."/$this->name";
 	}
 
 	public function getImages() {
 		global $db;
-		$result = $db->get_results( "SELECT id,name,date,info,rating,edits FROM image WHERE directoryId='$this->id'" );
+		$sth = $db->prepare( "SELECT id,name,date,info,rating,edits FROM image WHERE directoryId=?" );
+		$sth->execute( array( $this->id ) );
+		$result = $sth->fetchAll( PDO::FETCH_CLASS, 'Image' );
 		foreach ( $result as &$image ) {
 			$image->info = unserialize( $image->info );
 		}
@@ -35,7 +37,9 @@ class LDirectory {
 			}
 		}
 		closedir($dirHandle);
-		$newFiles = array_diff( $files, $db->get_results( "SELECT name FROM image WHERE directoryId='$this->id'" )?:array() );
+		$sth = $db->prepare( "SELECT name FROM image WHERE directoryId=?" );
+		$sth->execute( array( $this->id ) );
+		$newFiles = array_diff( $files, $sth->fetchAll( PDO::FETCH_COLUMN, 0 )?:array() );
 		sort( $newFiles );
 		return $newFiles;
 	}
@@ -45,12 +49,11 @@ class LDirectory {
 		// check if $images is a non-empty array
 		if ( is_array( $images ) && ! empty( $images ) ) {
 			// check if this dir does not exist in the db; if so, run the query again
-			if ( ! $db->get_var( "SELECT id FROM directory WHERE name='$this->name'" ) ) {
-				$db->query( "INSERT INTO directory (name, date) VALUES ('$this->name', ".time().")" );
-				$db->get_var( "SELECT id FROM directory WHERE name='$this->name'" );
+			if ( $this->id <= 0 ) {
+				$ins = $db->prepare( "INSERT INTO directory (name, date) VALUES (:name, :date)" );
+				$ins->execute( array( "name" => $this->name, "date" => time() ) );
+				$this->id = $this->getId();
 			}
-			// set the id variable with ezSQL's cached results
-			$this->id = $db->get_var( null );
 
 			// ensure that the cache dir exists
 			mkdir( $this->cacheDir, 0700, true );
@@ -85,8 +88,16 @@ class LDirectory {
 			// instantiate the image to get EXIF info
 			$image = new Image( $image_name, $this->name );
 			$image->getInfo();
-			$db->query( "INSERT INTO image (name, rating, directoryId, info, date, eventId) VALUES ('$image->name', 0, $this->id, '".serialize( $image->info )."', '$image->date', '$event->id'" );
+			$sth = $db->prepare( "INSERT INTO image (name, rating, directoryId, info, date, eventId) VALUES (:name, :rating, :directoryId, :info, :date, :eventId)" );
+			$sth->execute( array( "name" => $image->name, "rating" => 0, "directoryId" => $this->id, "info" => serialize( $image->info ), "date" => $image->date, "eventId" => $event->id ) );
 		}
+	}
+
+	private function getId() {
+		global $db;
+		$sth = $db->prepare( "SELECT id FROM directory WHERE name=?" );
+		$sth->execute( array( $this->name ) );
+		return $sth->fetchColumn();
 	}
 
 }
