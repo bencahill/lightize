@@ -18,8 +18,8 @@ class Image {
 			$sth = $db->prepare( "SELECT id FROM image WHERE name=:name AND directoryId=:directoryId" );
 			$sth->execute( array( "name" => $this->name, "directoryId" => $dir->id ) );
 			$this->id = $sth->fetchColumn();
+			$this->imagePath = L_IMAGE_DIR."/$this->dirName/$this->name";
 		}
-		$this->imagePath = L_IMAGE_DIR."/$this->dirName/$this->name";
 	}
 
 	public function getInfo() {
