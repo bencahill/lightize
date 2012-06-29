@@ -27,9 +27,6 @@ class LDirectory {
 		$sth = $db->prepare( "SELECT id,name,date,info,rating,edits FROM image WHERE directoryId=?" );
 		$sth->execute( array( $this->id ) );
 		$result = $sth->fetchAll( PDO::FETCH_CLASS, 'Image' );
-		foreach ( $result as &$image ) {
-			$image->info = unserialize( $image->info );
-		}
 		return $result;
 	}
 

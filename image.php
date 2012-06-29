@@ -20,6 +20,7 @@ class Image {
 			$this->id = $sth->fetchColumn();
 			$this->imagePath = L_IMAGE_DIR."/$this->dirName/$this->name";
 		}
+		$this->info = !empty($this->info)?unserialize($this->info):NULL;
 	}
 
 	public function getInfo() {

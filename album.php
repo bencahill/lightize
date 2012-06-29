@@ -37,9 +37,6 @@ class Album {
 		$sth = $db->prepare( "SELECT id,name,date,info,rating,edits,imageAlbum.hiddenInAlbum FROM image INNER JOIN imageAlbum ON image.id = imageAlbum.imageId WHERE albumId=?" );
 		$sth->execute( array( $this->id ) );
 		$result = $sth->fetchAll( PDO::FETCH_CLASS, 'Image' );
-		foreach ( $result as &$image ) {
-			$image->info = unserialize( $image->info );
-		}
 		return $result;
 	}
 
