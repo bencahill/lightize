@@ -7,13 +7,19 @@ class LDirectory {
 	private $imageDir;
 	private $cacheDir;
 
-	public function __construct( $name ) {
+	public function __construct( $name, $autoAdd = true ) {
 		global $db;
 		// set the name as a variable so we can access it later
 		$this->name = $name;
 		$this->id = $this->getId();
 		$this->imageDir = L_IMAGE_DIR."/$this->name";
 		$this->cacheDir = L_CACHE_DIR."/$this->name";
+		$this->autoAdd = $autoAdd;
+		if ( $this->id <= 0 && $this->autoAdd ) {
+			$ins = $db->prepare( "INSERT INTO directory (name, date) VALUES (:name, :date)" );
+			$ins->execute( array( "name" => $this->name, "date" => time() ) );
+			$this->id = $this->getId();
+		}
 	}
 
 	public function getImages() {
@@ -48,12 +54,6 @@ class LDirectory {
 		global $db;
 		// check if $images is a non-empty array
 		if ( is_array( $images ) && ! empty( $images ) ) {
-			// check if this dir does not exist in the db; if so, run the query again
-			if ( $this->id <= 0 ) {
-				$ins = $db->prepare( "INSERT INTO directory (name, date) VALUES (:name, :date)" );
-				$ins->execute( array( "name" => $this->name, "date" => time() ) );
-				$this->id = $this->getId();
-			}
 
 			// ensure that the cache dir exists
 			mkdir( $this->cacheDir, 0700, true );
