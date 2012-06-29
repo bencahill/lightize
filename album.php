@@ -34,7 +34,7 @@ class Album {
 
 	public function getImages() {
 		global $db;
-		$sth = $db->prepare( "SELECT id,name,date,info,rating,edits FROM image WHERE id IN (SELECT imageId FROM imageAlbum WHERE albumId=?)" );
+		$sth = $db->prepare( "SELECT id,name,date,info,rating,edits,imageAlbum.hiddenInAlbum FROM image INNER JOIN imageAlbum ON image.id = imageAlbum.imageId WHERE albumId=?" );
 		$sth->execute( array( $this->id ) );
 		$result = $sth->fetchAll( PDO::FETCH_CLASS, 'Image' );
 		foreach ( $result as &$image ) {
@@ -46,8 +46,8 @@ class Album {
 	public function addImage( $image_name, $dirName ) {
 		global $db;
 		$image = new Image( $image_name, $dirName );
-		$sth = $db->prepare( "INSERT INTO imageAlbum (imageId, albumId) VALUES (:imageId, :albumId)" );
-		$sth->execute( array( "imageId" => $image->id, "albumId" => $this->id ) );
+		$sth = $db->prepare( "INSERT INTO imageAlbum (imageId, albumId, hiddenInAlbum) VALUES (:imageId, :albumId, :hiddenInAlbum)" );
+		$sth->execute( array( "imageId" => $image->id, "albumId" => $this->id, "hiddenInAlbum" => 0 ) );
 	}
 
 	public function removeImage( $image_name, $dirId ) {

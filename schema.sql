@@ -2,6 +2,7 @@ CREATE TABLE image(
 	id INTEGER PRIMARY KEY NOT NULL,
 	name TEXT NOT NULL,
 	directoryId INTEGER NOT NULL,
+	hiddenInDirectory BOOLEAN NOT NULL,
 	eventId INTEGER NOT NULL,
 	date TEXT,
 	info TEXT,
@@ -35,6 +36,7 @@ CREATE TABLE album(
 CREATE TABLE imageAlbum(
 	imageId INTEGER NOT NULL,
 	albumId INTEGER NOT NULL,
+	hiddenInAlbum BOOLEAN NOT NULL,
 	FOREIGN KEY(imageId) REFERENCES image(id) ON DELETE CASCADE,
 	FOREIGN KEY(albumId) REFERENCES album(id) ON DELETE CASCADE,
 	PRIMARY KEY(imageId, albumId)

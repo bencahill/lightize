@@ -88,8 +88,8 @@ class LDirectory {
 			// instantiate the image to get EXIF info
 			$image = new Image( $image_name, $this->name );
 			$image->getInfo();
-			$sth = $db->prepare( "INSERT INTO image (name, rating, directoryId, info, date, eventId) VALUES (:name, :rating, :directoryId, :info, :date, :eventId)" );
-			$sth->execute( array( "name" => $image->name, "rating" => 0, "directoryId" => $this->id, "info" => serialize( $image->info ), "date" => $image->date, "eventId" => $event->id ) );
+			$sth = $db->prepare( "INSERT INTO image (name, rating, directoryId, hiddenInDirectory, info, date, eventId) VALUES (:name, :rating, :directoryId, :hiddenInDirectory, :info, :date, :eventId)" );
+			$sth->execute( array( "name" => $image->name, "rating" => 0, "directoryId" => $this->id, "hiddenInDirectory" => 0, "info" => serialize( $image->info ), "date" => $image->date, "eventId" => $event->id ) );
 		}
 	}
 
