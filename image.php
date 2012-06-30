@@ -22,7 +22,7 @@ class Image {
 		}
 		$this->info = !empty($this->info)?unserialize($this->info):NULL;
 		$pathInfo = pathinfo( $this->name );
-		$this->thumbnail = $pathInfo['filename']."_120.".$pathInfo['extension'];
+		$this->thumbnail = $pathInfo['filename']."_180.".$pathInfo['extension'];
 		$this->preview = $pathInfo['filename']."_900.".$pathInfo['extension'];
 	}
 
