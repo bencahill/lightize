@@ -29,7 +29,7 @@ class LDirectory {
 
 	public function getImages() {
 		global $db;
-		$sth = $db->prepare( "SELECT id,name,date,info,rating,edits FROM image WHERE directoryId=?" );
+		$sth = $db->prepare( "SELECT id,name,date,info,rating,edits,hiddenInDirectory FROM image WHERE directoryId=?" );
 		$sth->execute( array( $this->id ) );
 		$result = $sth->fetchAll( PDO::FETCH_CLASS, 'Image' );
 		return $result;
