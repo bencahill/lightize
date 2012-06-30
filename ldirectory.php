@@ -84,7 +84,7 @@ class LDirectory {
 	private function addToDb( $images ) {
 		global $db;
 		// initialize the "Unknown" event for this dir, possibly creating it
-		$event = new Event( "Unknown", $this->id );
+		$event = new Event( "Unknown", $this->name );
 		$event->add();
 		foreach ( $images as $image_name ) {
 			// instantiate the image to get EXIF info
