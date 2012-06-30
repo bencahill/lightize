@@ -7,7 +7,7 @@ class LDirectory {
 	private $imageDir;
 	private $cacheDir;
 
-	public function __construct( $name, $autoAdd = true ) {
+	public function __construct( $name, $autoAdd = false ) {
 		global $db;
 		// default directory is the latest
 		if ( empty( $name ) ) {
