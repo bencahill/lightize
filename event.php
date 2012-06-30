@@ -11,7 +11,7 @@ class Event {
 		global $db;
 		$this->name = $name;
 		$this->dirName = $dirName;
-		$dir = new LDirectory( $dirName );
+		$dir = new LDirectory( $dirName, true );
 		$this->dirId = $dir->id;
 		$this->id = $this->getId();
 	}
