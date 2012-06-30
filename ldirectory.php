@@ -76,8 +76,8 @@ class LDirectory {
 			$gimage = new Gmagick( "$this->imageDir/$image_name" );
 			$gimage->thumbnailImage( 900, 600, true );
 			$gimage->writeImage( "$this->cacheDir/{$imagePath['filename']}_900.{$imagePath['extension']}" );
-			$gimage->thumbnailImage( 150, 150, true );
-			$gimage->writeImage( "$this->cacheDir/{$imagePath['filename']}_150.{$imagePath['extension']}" );
+			$gimage->thumbnailImage( 120, 80, true );
+			$gimage->writeImage( "$this->cacheDir/{$imagePath['filename']}_120.{$imagePath['extension']}" );
 		}
 	}
 
