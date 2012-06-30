@@ -9,8 +9,13 @@ class LDirectory {
 
 	public function __construct( $name, $autoAdd = true ) {
 		global $db;
-		// set the name as a variable so we can access it later
-		$this->name = $name;
+		// default directory is the latest
+		if ( empty( $name ) ) {
+			$sth = $db->query( "SELECT name from directory ORDER BY date DESC LIMIT 1" );
+			$this->name = $sth->fetchColumn();
+		} else {
+			$this->name = $name;
+		}
 		$this->id = $this->getId();
 		$this->imageDir = L_IMAGE_DIR."/$this->name";
 		$this->cacheDir = L_CACHE_DIR."/$this->name";
