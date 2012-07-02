@@ -13,6 +13,10 @@ $images = $dir->getImages();
 
 <script src="js/jquery-1.4.2.js"></script>
 <script src="js/jquery.quicksand.js"></script>
+<script src="js/jquery.ui.core.js"></script>
+<script src="js/jquery.ui.widget.js"></script>
+<script src="js/jquery.ui.mouse.js"></script>
+<script src="js/jquery.ui.selectable.js"></script>
 <script>
 (function($) {
 	$.fn.sorted = function(customOptions) {
@@ -59,8 +63,11 @@ $(function() {
 
 		$originalData.quicksand($sortedData, function() {
 			$('#content ul').find('li').before(' ');
+			$('#imagelist').selectable("refresh");
 		});
 	});
+
+	$('#imagelist').selectable();
 });
 </script>
 

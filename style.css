@@ -9,4 +9,7 @@ div{ position:absolute; }
 #content ul li{ display:inline-block; vertical-align:middle; padding:0; margin:3px 3px; width:104px; max-height:104px; overflow:visible; }
 #content ul li img{ display: block; max-width:100px; max-height:100px; box-shadow:0 0 4px rgba(0,0,0,0.5); margin:2px auto; }
 #content ul li img.active{ margin:0 auto; border:2px solid black; }
+#content .ui-selecting img{ margin:0 auto; border:2px solid #FECA40; }
+#content .ui-selected img{ margin:0 auto; border:2px solid #F39814; }
+.ui-selectable-lasso { position: absolute; z-index: 100; border:1px solid #F39814; background: #FECA40; opacity:.5; }
 #status{ left:0; right:0; bottom:0; height:16px; background: blue; }
