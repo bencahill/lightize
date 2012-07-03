@@ -11,12 +11,13 @@ $images = $dir->getImages();
 <!DOCTYPE html>
 <meta charset="utf-8">
 
-<script src="js/jquery-1.4.2.js"></script>
+<script src="js/jquery-1.4.3.min.js"></script>
 <script src="js/jquery.quicksand.js"></script>
 <script src="js/jquery.ui.core.js"></script>
 <script src="js/jquery.ui.widget.js"></script>
 <script src="js/jquery.ui.mouse.js"></script>
 <script src="js/jquery.ui.selectable.js"></script>
+<script src="js/jquery.scrollIntoView.js"></script>
 <script>
 (function($) {
 	$.fn.sorted = function(customOptions) {
@@ -68,7 +69,14 @@ $(function() {
 	});
 
 	$('#imagelist').selectable({
-		filter: "li.image"
+		filter: "li.image",
+		change: function(event, ui) {
+			var $sel = ui.selection;
+			var len = ui.selection.length;
+			if ( len == 1 ) {
+				$sel.scrollIntoView();
+			}
+		}
 	});
 });
 </script>
