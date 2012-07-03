@@ -67,7 +67,9 @@ $(function() {
 		});
 	});
 
-	$('#imagelist').selectable();
+	$('#imagelist').selectable({
+		filter: "li.image"
+	});
 });
 </script>
 
@@ -83,19 +85,29 @@ $(function() {
 		<div id="content">
 			<ul id="imagelist">
 <?php foreach( $images as $index=>$image ): ?>
-				<li data-id="id-<?php echo $index+1; ?>" data-name="<?php echo $image->name; ?>" data-date="<?php echo $image->date; ?>" data-rating="<?php echo $image->rating; ?>"><img src="<?php echo "cache/$dir->name/$image->thumbnail" ?>"></li> 
+				<li class="image" data-id="id-<?php echo $index+1; ?>" data-name="<?php echo $image->name; ?>" data-date="<?php echo $image->date; ?>" data-rating="<?php echo $image->rating; ?>"><a href="#bla"><img class="center" src="<?php echo "cache/$dir->name/$image->thumbnail" ?>"></a></li> 
 <?php endforeach; ?>
 				<!-- To make justify work, up to ten items per row -->
-				<li data-id="99000" data-name="zzz"></li>
-				<li data-id="99001" data-name="zzz"></li>
-				<li data-id="99002" data-name="zzz"></li>
-				<li data-id="99003" data-name="zzz"></li>
-				<li data-id="99004" data-name="zzz"></li>
-				<li data-id="99005" data-name="zzz"></li>
-				<li data-id="99006" data-name="zzz"></li>
-				<li data-id="99007" data-name="zzz"></li>
-				<li data-id="99008" data-name="zzz"></li>
-				<li data-id="99010" data-name="zzz"></li>
+				<li data-id="id-9000" data-name="zzz"></li>
+				<li data-id="id-9001" data-name="zzz"></li>
+				<li data-id="id-9002" data-name="zzz"></li>
+				<li data-id="id-9003" data-name="zzz"></li>
+				<li data-id="id-9004" data-name="zzz"></li>
+				<li data-id="id-9005" data-name="zzz"></li>
+				<li data-id="id-9006" data-name="zzz"></li>
+				<li data-id="id-9007" data-name="zzz"></li>
+				<li data-id="id-9008" data-name="zzz"></li>
+				<li data-id="id-9010" data-name="zzz"></li>
+				<li data-id="id-9011" data-name="zzz"></li>
+				<li data-id="id-9012" data-name="zzz"></li>
+				<li data-id="id-9013" data-name="zzz"></li>
+				<li data-id="id-9014" data-name="zzz"></li>
+				<li data-id="id-9015" data-name="zzz"></li>
+				<li data-id="id-9016" data-name="zzz"></li>
+				<li data-id="id-9017" data-name="zzz"></li>
+				<li data-id="id-9018" data-name="zzz"></li>
+				<li data-id="id-9019" data-name="zzz"></li>
+				<li data-id="id-9020" data-name="zzz"></li>
 			</ul>
 		</div>
 	</div>
