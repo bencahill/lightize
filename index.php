@@ -18,6 +18,7 @@ $images = $dir->getImages();
 <script src="js/jquery.ui.mouse.js"></script>
 <script src="js/jquery.ui.selectable.js"></script>
 <script src="js/jquery.scrollIntoView.js"></script>
+<script src="js/moment.min.js"></script>
 <script>
 (function($) {
 	$.fn.sorted = function(customOptions) {
@@ -74,7 +75,15 @@ $(function() {
 			var $sel = ui.selection;
 			var len = ui.selection.length;
 			if ( len == 1 ) {
+				var date = moment($sel.attr('data-date')*1000).format('ddd, MMM D YYYY h:mm:ss A');
+				var name = $sel.attr('data-name');
+				var $images = $('#imagelist li.image');
+				var currentImage = $images.index($sel)+1;
+				var totalImages = $images.length;
+				$('#status').text(date+name+currentImage+' of '+totalImages);
 				$sel.scrollIntoView();
+			} else {
+				$('#status').text(len+' items selected');
 			}
 		}
 	});
