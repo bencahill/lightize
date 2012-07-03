@@ -78,6 +78,21 @@ $(function() {
 			}
 		}
 	});
+
+	$('input[name=size]').change(function() {
+		var size = $(this).val();
+		var imgSize = size - 4;
+		$('#content ul li').width(size).height(size);
+		$data.find('li').width(size).height(size);
+		$('#content ul li a').css('line-height', size+'px');
+		$data.find('li a').css('line-height', size+'px');
+		$('#content ul li img').css('max-width', imgSize+'px').css('max-height', imgSize+'px');
+		$data.find('li img').css('max-width', imgSize+'px').css('max-height', imgSize+'px');
+	});
+
+	$('input[name=size]').mouseup(function() {
+		$('#imagelist').selectable("refresh");
+	});
 });
 </script>
 
@@ -89,6 +104,7 @@ $(function() {
 		<div id="toolbar">
 			<label><input name="sort" type="radio"></input>Date</label>
 			<label><input name="sort" type="radio"></input>Name</label>
+			<input name="size" type="range" min="50" max="180" value="100">
 		</div>
 		<div id="content">
 			<ul id="imagelist">
