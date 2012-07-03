@@ -200,12 +200,8 @@
 			// - calling _select doesn't work, since it's only for mouse interaction (no ctrl focus move!)
 			var currentIndex = this.items.index(this.currentFocus[0]);
 			var newIndex = this.items.index(current[1]);
-
-			console.log('this.items:');
-			console.log(this.items);
-			console.log(currentIndex);
 			
-			return this._selectAdjacent(event, 1);
+			return this._selectAdjacent(event, newIndex - currentIndex);
 			
 		},
 

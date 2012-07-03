@@ -160,7 +160,6 @@ Github site: http://github.com/razorjack/quicksand
             // No offset calculations are needed, the browser just extracts position from underlayered destination items
             // and sets animation to destination positions.
             $dest.insertBefore($sourceParent);
-			// var textNode = document.createTextNode(' ');
 			$('#content ul').find('li').before(' ');
             $dest.css('opacity', 0.0);
             rawDest.style.zIndex = -1;
@@ -284,7 +283,6 @@ Github site: http://github.com/razorjack/quicksand
                     // Let's create it
                     d = destElement.clone();
                     var rawDestElement = d.get(0);
-					console.log(rawDestElement);
                     rawDestElement.style.position = 'absolute';
                     rawDestElement.style.margin = '0';
                     rawDestElement.style.top = destElement.offset().top - correctionOffset.top + 'px';
