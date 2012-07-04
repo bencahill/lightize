@@ -93,7 +93,7 @@ $(function() {
 
 	$('input[name=size]').change(function() {
 		var size = $(this).val();
-		var imgSize = size - 4;
+		var imgSize = size - 12;
 		$('#content ul li').width(size).height(size);
 		$data.find('li').width(size).height(size);
 		$('#content ul li a').css('line-height', size+'px');
@@ -118,7 +118,7 @@ $(function() {
 		<div id="toolbar">
 			<label><input name="sort" type="radio"></input>Date</label>
 			<label><input name="sort" type="radio"></input>Name</label>
-			<input name="size" type="range" min="50" max="180" value="100">
+			<input name="size" type="range" min="50" max="180" value="112">
 		</div>
 		<div id="content">
 			<ul id="imagelist">
