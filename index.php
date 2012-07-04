@@ -80,7 +80,9 @@ $(function() {
 				var $images = $('#imagelist li.image');
 				var currentImage = $images.index($sel)+1;
 				var totalImages = $images.length;
-				$('#status').text(date+name+currentImage+' of '+totalImages);
+				var dimensions = $sel.attr('data-dimensions');
+				var size = ($sel.attr('data-size') / (1024*1024)).toFixed(1)+'M';
+				$('#status').text(date+name+currentImage+' of '+totalImages+dimensions+size);
 				$sel.scrollIntoView();
 			} else {
 				$('#status').text(len+' items selected');
@@ -118,7 +120,7 @@ $(function() {
 		<div id="content">
 			<ul id="imagelist">
 <?php foreach( $images as $index=>$image ): ?>
-				<li class="image" data-id="id-<?php echo $index+1; ?>" data-name="<?php echo $image->name; ?>" data-date="<?php echo $image->date; ?>" data-rating="<?php echo $image->rating; ?>"><a href="#bla"><img class="center" src="<?php echo "cache/$dir->name/$image->thumbnail" ?>"></a></li> 
+				<li class="image" data-id="id-<?php echo $index+1; ?>" data-name="<?php echo $image->name; ?>" data-date="<?php echo $image->date; ?>" data-rating="<?php echo $image->rating; ?>" data-dimensions="<?php echo $image->info['dimensions']['width'].'x'.$image->info['dimensions']['height']; ?>" data-size="<?php echo $image->info['sizeInBytes']; ?>"><a href="#bla"><img class="center" src="<?php echo "cache/$dir->name/$image->thumbnail" ?>"></a></li> 
 <?php endforeach; ?>
 				<!-- To make justify work, up to ten items per row -->
 				<li data-id="id-9000" data-name="zzz"></li>

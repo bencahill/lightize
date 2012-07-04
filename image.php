@@ -37,6 +37,10 @@ class Image {
 			$this->date = filemtime( $this->imagePath );
 		}
 
+		$dimensions = getimagesize( $this->imagePath );
+		$info['dimensions'] = array( 'width' => $dimensions[0], 'height' => $dimensions[1] );
+		$info['sizeInBytes'] = filesize( $this->imagePath );
+
 		$this->info = $info;
 	}
 
