@@ -66,6 +66,7 @@ $(function() {
 		$originalData.quicksand($sortedData, function() {
 			$('#content ul').find('li').before(' ');
 			$('#imagelist').css('height', '').selectable("refresh");
+			$('a').click(function(event) { event.preventDefault(); });
 		});
 	});
 
@@ -104,6 +105,8 @@ $(function() {
 	$('input[name=size]').mouseup(function() {
 		$('#imagelist').selectable("refresh");
 	});
+
+	$('a').click(function(event) { event.preventDefault(); });
 });
 </script>
 
