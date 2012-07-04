@@ -148,4 +148,4 @@ $(function() {
 	</div>
 </div>
 
-<div id="status"></div>
+<div id="status">0 items selected</div>
