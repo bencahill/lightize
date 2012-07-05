@@ -73,7 +73,7 @@ $(function() {
 	$('#imagelist').selectable({
 		filter: "li.image",
 		change: function(event, ui) {
-			var $sel = ui.selection;
+			$sel = ui.selection;
 			var len = ui.selection.length;
 			if ( len == 1 ) {
 				var date = moment($sel.attr('data-date')*1000).format('ddd, MMM D YYYY h:mm:ss A');
@@ -88,12 +88,26 @@ $(function() {
 				$('#status li.number').text(currentImage+' of '+totalImages);
 				$('#status li.dimensions').text(dimensions);
 				$('#status li.bytes').text(size);
+
+				var rating = $sel.attr('data-rating');
+				$('.rating #star'+rating).attr('checked', true);
 				$sel.scrollIntoView();
 			} else {
 				$('#status li').text('');
 				$('#status li.name').text(len+' items selected');
+				$('input[name=rating]:checked').attr('checked', false);
 			}
 		}
+	});
+
+	$('input[name=rating]').change(function() {
+		var rating = $(this).filter(':checked').val();
+		$sel.each(function() {
+			var $this = $(this);
+			$originalData.find("li[data-id='"+$this.attr('data-id')+"']").attr('data-rating', rating);
+			$data.find("li[data-id='"+$this.attr('data-id')+"']").attr('data-rating', rating);
+			$this.attr('data-rating', rating);
+		});
 	});
 
 	$('input[name=size]').change(function() {
@@ -157,6 +171,14 @@ $(function() {
 </div>
 
 <div id="status">
+<div class="rating">
+    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">5 stars</label>
+    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">4 stars</label>
+    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">3 stars</label>
+    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">2 stars</label>
+    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">1 star</label>
+    <input type="radio" id="star0" name="rating" value="0" /><label for="star0" title="0 stars">0 stars</label>
+</div>
 <ul>
 	<li class="date"></li>
 	<li class="name"></li>
