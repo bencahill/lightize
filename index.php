@@ -83,10 +83,15 @@ $(function() {
 				var totalImages = $images.length;
 				var dimensions = $sel.attr('data-dimensions');
 				var size = ($sel.attr('data-size') / (1024*1024)).toFixed(1)+'M';
-				$('#status').text(date+name+currentImage+' of '+totalImages+dimensions+size);
+				$('#status li.date').text(date);
+				$('#status li.name').text(name);
+				$('#status li.number').text(currentImage+' of '+totalImages);
+				$('#status li.dimensions').text(dimensions);
+				$('#status li.bytes').text(size);
 				$sel.scrollIntoView();
 			} else {
-				$('#status').text(len+' items selected');
+				$('#status li').text('');
+				$('#status li.name').text(len+' items selected');
 			}
 		}
 	});
@@ -151,4 +156,12 @@ $(function() {
 	</div>
 </div>
 
-<div id="status">0 items selected</div>
+<div id="status">
+<ul>
+	<li class="date"></li>
+	<li class="name"></li>
+	<li class="number">0 items selected</li>
+	<li class="dimensions"></li>
+	<li class="bytes"></li>
+</ul>
+</div>
