@@ -47,9 +47,9 @@ class Album {
 		$sth->execute( array( "imageId" => $image->id, "albumId" => $this->id, "hiddenInAlbum" => 0 ) );
 	}
 
-	public function removeImage( $image_name, $dirId ) {
+	public function removeImage( $image_name, $dirName ) {
 		global $db;
-		$image = new Image( $image_name, $dirId );
+		$image = new Image( $image_name, $dirName );
 		$sth = $db->prepare( "DELETE FROM imageAlbum WHERE imageId=:imageId AND albumId=:albumId" );
 		$sth->execute( array( "imageId" => $image->id, "albumId" => $this->id ) );
 	}
