@@ -1,5 +1,6 @@
 * { margin:0; padding:0; overflow:hidden; }
 div{ position:absolute; }
+a{ cursor:pointer; }
 #main{ top:0; left:0; right:0; bottom:16px; }
 #dirs{ top:0; bottom:0; left:0; width:25%; overflow-y:auto; background: red; }
 #images{ top:0; bottom:0; right:0; width:75%; overflow-y:auto; background: #bbb; }
@@ -16,6 +17,7 @@ div{ position:absolute; }
 #status ul{ list-style-type:none; display:table; margin:0 auto; padding:3px 0 0; }
 #status li{ display:table-cell; float:left; margin-right:20px; font-size:12px; height:15px; }
 #status li.name{ max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#loading{ background:url(loading.gif); height:16px; width:16px; top:2px; right:5px; display:none; }
 
 /* http://lea.verou.me/2011/08/accessible-star-rating-widget-with-pure-css/ */
 .rating {
@@ -72,6 +74,49 @@ div{ position:absolute; }
 }
 
 .rating > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}
+
+#hideImage {
+	right:25px;
+	top:0;
+}
+
+#hideImage input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+#hideImage label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    line-height:1.2;
+    color:#ddd;
+    text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+#hideImage label:before {
+    content: 'H ';
+}
+
+#hideImage input:checked ~ label {
+    color: #f70;
+    text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+#hideImage label:hover {
+    color: gold;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+#hideImage > label:active {
     position:relative;
     top:2px;
     left:2px;

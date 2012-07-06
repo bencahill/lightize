@@ -91,24 +91,46 @@ $(function() {
 
 				var rating = $sel.attr('data-rating');
 				$('.rating #star'+rating).attr('checked', true);
+				var hidden = ($sel.attr('data-hidden') == 1) ? true : false;
+				$('#hideImage input').attr('checked', hidden);
 				$sel.scrollIntoView();
 			} else {
 				$('#status li').text('');
 				$('#status li.name').text(len+' items selected');
 				$('input[name=rating]:checked').attr('checked', false);
+				$('input[name=hidden]').attr('checked', false);
 			}
 		}
 	});
 
 	$('input[name=rating]').change(function() {
 		var rating = $(this).filter(':checked').val();
-		$sel.each(function() {
-			var $this = $(this);
-			$originalData.find("li[data-id='"+$this.attr('data-id')+"']").attr('data-rating', rating);
-			$data.find("li[data-id='"+$this.attr('data-id')+"']").attr('data-rating', rating);
-			$this.attr('data-rating', rating);
-		});
+		action( 'rating', rating );
 	});
+
+	$('input[name=hidden]').change(function() {
+		var hidden = $(this).attr('checked') ? 1 : 0;
+		action( 'hidden', hidden );
+	});
+
+	function action( name, value ) {
+		if( $sel.length > 0 ) {
+			$('#loading').fadeIn( 100 );
+
+			var params = { 'images': $sel.map(function() { return $(this).attr('data-name'); }), 'directory': '<?php echo $dir->name; ?>' }
+			params[name] = value;
+
+			$.get(document.URL+'action.php', params, function() {
+				$sel.each(function() {
+					var $this = $(this);
+					$originalData.find("li[data-id='"+$this.attr('data-id')+"']").attr('data-'+name, value);
+					$data.find("li[data-id='"+$this.attr('data-id')+"']").attr('data-'+name, value);
+					$this.attr('data-'+name, value);
+				});
+				$('#loading').fadeOut( 100 );
+			});
+		}
+	}
 
 	$('input[name=size]').change(function() {
 		var size = $(this).val();
@@ -142,7 +164,7 @@ $(function() {
 		<div id="content">
 			<ul id="imagelist">
 <?php foreach( $images as $index=>$image ): ?>
-				<li class="image" data-id="id-<?php echo $index+1; ?>" data-name="<?php echo $image->name; ?>" data-date="<?php echo $image->date; ?>" data-rating="<?php echo $image->rating; ?>" data-dimensions="<?php echo $image->info['dimensions']['width'].'x'.$image->info['dimensions']['height']; ?>" data-size="<?php echo $image->info['sizeInBytes']; ?>"><a href="#bla"><img class="center" src="<?php echo "cache/$dir->name/$image->thumbnail" ?>"></a></li> 
+				<li class="image" data-id="id-<?php echo $index+1; ?>" data-name="<?php echo $image->name; ?>" data-date="<?php echo $image->date; ?>" data-rating="<?php echo $image->rating; ?>" data-hidden="<?php echo $image->hiddenInDirectory; ?>" data-dimensions="<?php echo $image->info['dimensions']['width'].'x'.$image->info['dimensions']['height']; ?>" data-size="<?php echo $image->info['sizeInBytes']; ?>"><a><img class="center" src="<?php echo "cache/$dir->name/$image->thumbnail" ?>"></a></li> 
 <?php endforeach; ?>
 				<!-- To make justify work, up to ten items per row -->
 				<li data-id="id-9000" data-name="zzz"></li>
@@ -186,4 +208,6 @@ $(function() {
 	<li class="dimensions"></li>
 	<li class="bytes"></li>
 </ul>
+<div id="hideImage"><input type="checkbox" id="hidden" name="hidden" value="1" /><label for="hidden" title="Hidden">Hidden</label></div>
+<div id="loading"></div>
 </div>

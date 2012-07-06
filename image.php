@@ -5,6 +5,7 @@ class Image {
 	public $name;
 	public $id;
 	private $dirName;
+	private $dirId;
 	public $date;
 	public $info;
 	private $imagePath;
@@ -15,8 +16,9 @@ class Image {
 			$this->name = $name;
 			$this->dirName = $dirName;
 			$dir = new LDirectory( $this->dirName );
+			$this->dirId = $dir->id;
 			$sth = $db->prepare( "SELECT id FROM image WHERE name=:name AND directoryId=:directoryId" );
-			$sth->execute( array( "name" => $this->name, "directoryId" => $dir->id ) );
+			$sth->execute( array( "name" => $this->name, "directoryId" => $this->dirId ) );
 			$this->id = $sth->fetchColumn();
 			$this->imagePath = L_IMAGE_DIR."/$this->dirName/$this->name";
 		}
@@ -42,6 +44,18 @@ class Image {
 		$info['sizeInBytes'] = filesize( $this->imagePath );
 
 		$this->info = $info;
+	}
+
+	public function setRating( $rating ) {
+		global $db;
+		$sth = $db->prepare( "UPDATE image SET rating=:rating WHERE name=:name AND directoryId=:directoryId" );
+		$sth->execute( array( "rating" => $rating, "name" => $this->name, "directoryId" => $this->dirId ) );
+	}
+
+	public function setHidden( $hidden ) {
+		global $db;
+		$sth = $db->prepare( "UPDATE image SET hiddenInDirectory=:hiddenInDirectory WHERE name=:name AND directoryId=:directoryId" );
+		$sth->execute( array( "hiddenInDirectory" => $hidden, "name" => $this->name, "directoryId" => $this->dirId ) );
 	}
 
 }
