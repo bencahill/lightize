@@ -11,6 +11,8 @@ $images = $dir->getImages();
 <!DOCTYPE html>
 <meta charset="utf-8">
 
+<title>Lightize - <?php echo $dir->name; ?></title>
+
 <script src="js/jquery-1.4.3.min.js"></script>
 <script src="js/jquery.quicksand.js"></script>
 <script src="js/jquery.ui.core.js"></script>
@@ -48,15 +50,33 @@ $images = $dir->getImages();
 // DOMContentLoaded
 $(function() {
 
-	var $sortButtons = $('input[name=sort]');
+	var $buttons = $('input[name=sort]').add('input[name=ratingFilter]').add('input[name=hiddenFilter]');
 
 	var $originalData = $('#imagelist');
 	var $data = $originalData.clone();
 
-	$sortButtons.change(function(e) {
+	$buttons.change(function(e) {
+		filterSort();
+	});
+
+	function filterSort() {
 		var $filteredData = $data.find('li');
 
-		var sortType = $('input[name=sort]:checked').parent().text().toLowerCase();
+		var ratingFilter = $('input[name=ratingFilter]:checked').val();
+		// hide by default
+		var hiddenFilter = $('input[name=hiddenFilter]').attr('checked') ? false : true;
+
+		if ( hiddenFilter ) {
+			$filteredData = $filteredData.filter('[data-hidden=0]');
+		}
+
+		$filteredData = $filteredData.filter(function() {
+			return $(this).attr('data-rating') >= ratingFilter;
+		});
+
+		$filteredData = $filteredData.show();
+
+		var sortType = $('input[name=sort]:checked').val().toLowerCase();
 		var $sortedData = $filteredData.sorted({
 			by: function(v) {
 				return $(v).attr('data-' + sortType);
@@ -68,7 +88,7 @@ $(function() {
 			$('#imagelist').css('height', '').selectable("refresh");
 			$('a').click(function(event) { event.preventDefault(); });
 		});
-	});
+	}
 
 	$('#imagelist').selectable({
 		filter: "li.image",
@@ -128,6 +148,7 @@ $(function() {
 					$this.attr('data-'+name, value);
 				});
 				$('#loading').fadeOut( 100 );
+				filterSort();
 			});
 		}
 	}
@@ -157,36 +178,51 @@ $(function() {
 	<div id="dirs"></div>
 	<div id="images">
 		<div id="toolbar">
-			<label><input name="sort" type="radio"></input>Date</label>
-			<label><input name="sort" type="radio"></input>Name</label>
-			<input name="size" type="range" min="50" max="180" value="112">
+			<ul>
+				<li class="rating">
+					<input type="radio" id="star0Filter" name="ratingFilter" value="0" /><label for="star0Filter" title="0 stars">0 stars</label>
+					<input type="radio" id="star1Filter" name="ratingFilter" value="1" checked /><label for="star1Filter" title="1 star">1 star</label>
+					<input type="radio" id="star2Filter" name="ratingFilter" value="2" /><label for="star2Filter" title="2 stars">2 stars</label>
+					<input type="radio" id="star3Filter" name="ratingFilter" value="3" /><label for="star3Filter" title="3 stars">3 stars</label>
+					<input type="radio" id="star4Filter" name="ratingFilter" value="4" /><label for="star4Filter" title="4 stars">4 stars</label>
+					<input type="radio" id="star5Filter" name="ratingFilter" value="5" /><label for="star5Filter" title="5 stars">5 stars</label>
+				</li>
+				<li class="hideImage"><input type="checkbox" id="hiddenFilter" name="hiddenFilter" value="1" /><label for="hiddenFilter" title="Hidden">Hidden</label></li>
+				<li id="sort">
+					<input id="sortDate" name="sort" type="radio" value="date" checked /><label for="sortDate">Date</label>
+					<input id="sortName" name="sort" type="radio" value="name" /><label for="sortName">Name</label>
+				</li>
+				<li>
+				<input id="size" name="size" type="range" min="50" max="180" value="112">
+				</li>
+			</ul>
 		</div>
 		<div id="content">
 			<ul id="imagelist">
 <?php foreach( $images as $index=>$image ): ?>
-				<li class="image" data-id="id-<?php echo $index+1; ?>" data-name="<?php echo $image->name; ?>" data-date="<?php echo $image->date; ?>" data-rating="<?php echo $image->rating; ?>" data-hidden="<?php echo $image->hiddenInDirectory; ?>" data-dimensions="<?php echo $image->info['dimensions']['width'].'x'.$image->info['dimensions']['height']; ?>" data-size="<?php echo $image->info['sizeInBytes']; ?>"><a><img class="center" src="<?php echo "cache/$dir->name/$image->thumbnail" ?>"></a></li> 
+				<li class="image" data-id="id-<?php echo $index+1; ?>" data-name="<?php echo $image->name; ?>" data-date="<?php echo $image->date; ?>" data-rating="<?php echo $image->rating; ?>" data-hidden="<?php echo $image->hiddenInDirectory; ?>" data-dimensions="<?php echo $image->info['dimensions']['width'].'x'.$image->info['dimensions']['height']; ?>" data-size="<?php echo $image->info['sizeInBytes']; ?>"<?php if( $image->hiddenInDirectory == 1 || $image->rating == 0 ) { echo ' style="display:none;"'; } ?>><a><img class="center" src="<?php echo "cache/$dir->name/$image->thumbnail" ?>"></a></li> 
 <?php endforeach; ?>
 				<!-- To make justify work, up to ten items per row -->
-				<li data-id="id-9000" data-name="zzz"></li>
-				<li data-id="id-9001" data-name="zzz"></li>
-				<li data-id="id-9002" data-name="zzz"></li>
-				<li data-id="id-9003" data-name="zzz"></li>
-				<li data-id="id-9004" data-name="zzz"></li>
-				<li data-id="id-9005" data-name="zzz"></li>
-				<li data-id="id-9006" data-name="zzz"></li>
-				<li data-id="id-9007" data-name="zzz"></li>
-				<li data-id="id-9008" data-name="zzz"></li>
-				<li data-id="id-9010" data-name="zzz"></li>
-				<li data-id="id-9011" data-name="zzz"></li>
-				<li data-id="id-9012" data-name="zzz"></li>
-				<li data-id="id-9013" data-name="zzz"></li>
-				<li data-id="id-9014" data-name="zzz"></li>
-				<li data-id="id-9015" data-name="zzz"></li>
-				<li data-id="id-9016" data-name="zzz"></li>
-				<li data-id="id-9017" data-name="zzz"></li>
-				<li data-id="id-9018" data-name="zzz"></li>
-				<li data-id="id-9019" data-name="zzz"></li>
-				<li data-id="id-9020" data-name="zzz"></li>
+				<li data-id="id-9000" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9001" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9002" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9003" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9004" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9005" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9006" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9007" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9008" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9010" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9011" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9012" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9013" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9014" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9015" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9016" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9017" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9018" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9019" data-name="zzz" data-rating="5" data-hidden="0"></li>
+				<li data-id="id-9020" data-name="zzz" data-rating="5" data-hidden="0"></li>
 			</ul>
 		</div>
 	</div>
@@ -208,6 +244,6 @@ $(function() {
 	<li class="dimensions"></li>
 	<li class="bytes"></li>
 </ul>
-<div id="hideImage"><input type="checkbox" id="hidden" name="hidden" value="1" /><label for="hidden" title="Hidden">Hidden</label></div>
+<div class="hideImage"><input type="checkbox" id="hidden" name="hidden" value="1" /><label for="hidden" title="Hidden">Hidden</label></div>
 <div id="loading"></div>
 </div>

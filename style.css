@@ -4,8 +4,11 @@ a{ cursor:pointer; }
 #main{ top:0; left:0; right:0; bottom:16px; }
 #dirs{ top:0; bottom:0; left:0; width:25%; overflow-y:auto; background: red; }
 #images{ top:0; bottom:0; right:0; width:75%; overflow-y:auto; background: #bbb; }
-#toolbar{ left:0; right:0; top:0; height:32px; background: yellow; }
-#content{ top:32px; left:0; right:0; bottom:0; overflow-y:auto; padding:14px; box-shadow:inset 0 15px 15px -15px rgba(0,0,0,0.25),inset 0 -15px 15px -15px rgba(0,0,0,0.75); }
+#toolbar{ left:0; right:0; top:0; height:24px; background: #666666; }
+#toolbar ul{ list-style-type:none; display:table; margin:0 auto; }
+#toolbar ul li{ display:table-cell; float:left; margin-right:20px; }
+#toolbar .rating, #toolbar .hideImage{ margin-top:2px; }
+#content{ top:24px; left:0; right:0; bottom:0; overflow-y:auto; padding:14px; box-shadow:inset 0 15px 15px -15px rgba(0,0,0,0.25),inset 0 -15px 15px -15px rgba(0,0,0,0.75); }
 #content ul{ list-style-type:none; text-align:justify; }
 #content ul li{ display:inline-block; text-align:center; padding:0; margin:0; width:112px; height:112px; overflow:visible; }
 #content ul li a{ display:block; line-height:112px; }
@@ -18,6 +21,36 @@ a{ cursor:pointer; }
 #status li{ display:table-cell; float:left; margin-right:20px; font-size:12px; height:15px; }
 #status li.name{ max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 #loading{ background:url(loading.gif); height:16px; width:16px; top:2px; right:5px; display:none; }
+
+#sort > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+#sort > label {
+	cursor:pointer;
+	font-size:14px;
+	color:#ddd;
+    text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+#sort > input:checked + label {
+    color: #f70;
+    text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+#sort > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}
+
+#sort > input:checked + label:hover,
+#sort > label:hover {
+    color: #ea0;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
 
 /* http://lea.verou.me/2011/08/accessible-star-rating-widget-with-pure-css/ */
 .rating {
@@ -45,10 +78,15 @@ a{ cursor:pointer; }
     text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
 }
 
+#toolbar .rating:not(:checked) > label {
+	float:left;
+}
+
 .rating:not(:checked) > label:before {
     content: '★ ';
 }
 
+#star0Filter + label:before,
 #star0 + label:before {
     content: 'O ' !important;
 }
@@ -79,18 +117,18 @@ a{ cursor:pointer; }
     left:2px;
 }
 
-#hideImage {
+.hideImage {
 	right:25px;
 	top:0;
 }
 
-#hideImage input {
+.hideImage input {
     position:absolute;
     top:-9999px;
     clip:rect(0,0,0,0);
 }
 
-#hideImage label {
+.hideImage label {
     float:right;
     width:1em;
     padding:0 .1em;
@@ -102,21 +140,21 @@ a{ cursor:pointer; }
     text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
 }
 
-#hideImage label:before {
+.hideImage label:before {
     content: 'H ';
 }
 
-#hideImage input:checked ~ label {
+.hideImage input:checked ~ label {
     color: #f70;
     text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
 }
 
-#hideImage label:hover {
+.hideImage label:hover {
     color: gold;
     text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
 }
 
-#hideImage > label:active {
+.hideImage > label:active {
     position:relative;
     top:2px;
     left:2px;
